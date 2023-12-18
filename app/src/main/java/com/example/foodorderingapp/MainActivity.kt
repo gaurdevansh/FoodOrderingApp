@@ -2,6 +2,7 @@ package com.example.foodorderingapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -10,9 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.foodorderingapp.model.Restaurant
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
+
+    private val TAG = "MainActivity"
     private val POSTER_SCROLL_TIME = 3000L
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
@@ -22,11 +27,9 @@ class MainActivity : AppCompatActivity() {
     private var scrollJob: Job? = null
     private var currentPage = 0
     private lateinit var restaurantRecyclerView: RecyclerView
-    private val restaurantList: List<Restaurant> = listOf(
-        Restaurant("MacDonalds", R.drawable.mac_logo),
-        Restaurant("Burger King", R.drawable.bug_logo),
-        Restaurant("KFC", R.drawable.kfc_logo)
-    )
+    private lateinit var restaurantList: List<Restaurant>
+
+    private val firebaseManager = FirebaseManager.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -46,7 +49,8 @@ class MainActivity : AppCompatActivity() {
         posterAdapter = PosterAdapter(this, posterList)
         viewPager.adapter = posterAdapter
         setPosterScroll()
-        setUpRestaurantRecyclerview()
+        //setUpRestaurantRecyclerview()
+        fetchRestaurantListFromFirestore()
     }
 
     private fun setUpRestaurantRecyclerview() {
@@ -55,6 +59,20 @@ class MainActivity : AppCompatActivity() {
         restaurantRecyclerView.layoutManager = LinearLayoutManager(this)
         restaurantRecyclerView.adapter = restaurantAdapter
         restaurantRecyclerView.addItemDecoration(SpaceItemDecoration(20))
+    }
+
+    private fun fetchRestaurantListFromFirestore() {
+        firebaseManager.getRestaurantNames(object : FirebaseManager.FirebaseCallback<List<Restaurant>> {
+            override fun onSuccess(result: List<Restaurant>) {
+                restaurantList = result
+                setUpRestaurantRecyclerview()
+            }
+
+            override fun onFailure(e: Exception) {
+                Log.e(TAG, "onFailure: *** Error Fetching Restaurant List ", e )
+            }
+
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -6,19 +6,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.foodorderingapp.model.Restaurant
 
 class RestaurantListAdapter(private val restaurantList: List<Restaurant>):
 RecyclerView.Adapter<RestaurantListAdapter.RestaurantViewHolder>()
 {
     class RestaurantViewHolder(itemView: View):  RecyclerView.ViewHolder(itemView){
-        private val name: TextView = itemView.findViewById(R.id.tv_rest_name)
-        private val poster: ImageView = itemView.findViewById(R.id.iv_rest_poster)
-
-        fun bind(restaurant: Restaurant) {
-            name.text = restaurant.name
-            poster.setImageResource(restaurant.poster)
-        }
+        val name: TextView = itemView.findViewById(R.id.tv_rest_name)
+        val poster: ImageView = itemView.findViewById(R.id.iv_rest_poster)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantViewHolder {
@@ -32,7 +28,8 @@ RecyclerView.Adapter<RestaurantListAdapter.RestaurantViewHolder>()
 
     override fun onBindViewHolder(holder: RestaurantViewHolder, position: Int) {
         val restaurant = restaurantList[position]
-        holder.bind(restaurant)
+        holder.name.text = restaurant.name
+        Glide.with(holder.itemView.context).load(restaurant.logoUrl).into(holder.poster)
     }
 
 }
