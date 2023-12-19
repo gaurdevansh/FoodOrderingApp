@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodorderingapp.model.Restaurant
 
-class RestaurantListAdapter(private val restaurantList: List<Restaurant>):
+class RestaurantListAdapter(private val restaurantList: List<Restaurant>,
+private val clickListener: OnItemClickListener):
 RecyclerView.Adapter<RestaurantListAdapter.RestaurantViewHolder>()
 {
     class RestaurantViewHolder(itemView: View):  RecyclerView.ViewHolder(itemView){
@@ -30,6 +31,9 @@ RecyclerView.Adapter<RestaurantListAdapter.RestaurantViewHolder>()
         val restaurant = restaurantList[position]
         holder.name.text = restaurant.name
         Glide.with(holder.itemView.context).load(restaurant.logoUrl).into(holder.poster)
+        holder.itemView.setOnClickListener {
+            clickListener.onItemClick(position)
+        }
     }
 
 }

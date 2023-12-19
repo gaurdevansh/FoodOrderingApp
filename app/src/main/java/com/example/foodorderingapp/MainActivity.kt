@@ -1,5 +1,6 @@
 package com.example.foodorderingapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -15,7 +16,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnItemClickListener {
 
     private val TAG = "MainActivity"
     private val POSTER_SCROLL_TIME = 3000L
@@ -49,13 +50,12 @@ class MainActivity : AppCompatActivity() {
         posterAdapter = PosterAdapter(this, posterList)
         viewPager.adapter = posterAdapter
         setPosterScroll()
-        //setUpRestaurantRecyclerview()
         fetchRestaurantListFromFirestore()
     }
 
     private fun setUpRestaurantRecyclerview() {
         restaurantRecyclerView = findViewById(R.id.restaurantRecyclerview)
-        val restaurantAdapter = RestaurantListAdapter(restaurantList)
+        val restaurantAdapter = RestaurantListAdapter(restaurantList, this)
         restaurantRecyclerView.layoutManager = LinearLayoutManager(this)
         restaurantRecyclerView.adapter = restaurantAdapter
         restaurantRecyclerView.addItemDecoration(SpaceItemDecoration(20))
@@ -103,4 +103,12 @@ class MainActivity : AppCompatActivity() {
         scrollJob?.cancel()
         super.onDestroy()
     }
+
+    override fun onItemClick(position: Int) {
+        val intent = Intent(this, RestaurantActivity::class.java)
+        intent.putExtra("RESTAURANT_NAME", restaurantList[position].name)
+        intent.putExtra("RESTAURANT_ID", restaurantList[position].id)
+        startActivity(intent)
+    }
+
 }
