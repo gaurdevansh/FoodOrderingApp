@@ -4,12 +4,13 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="10dp"
-    android:elevation="2dp">
+    android:elevation="2dp"
+    android:background="@color/white">
 
     <ImageView
         android:id="@+id/foodImage"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -19,10 +20,12 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/foodImage"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="32dp"
+        app:layout_constraintEnd_toStartOf="@id/addToCartBtn"
+        android:layout_marginStart="16dp"
         android:text="Vada Pav"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintWidth_default="wrap"
         android:layout_marginTop="8dp"/>
 
     <TextView
@@ -34,19 +37,18 @@
         app:layout_constraintStart_toStartOf="@id/foodTitle"
         app:layout_constraintEnd_toEndOf="@id/foodTitle"
         android:text="Rs 10"
-        android:textSize="16sp" />
+        android:textSize="15sp" />
 
     <Button
         android:id="@+id/addToCartBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="16dp"
-        android:background="@color/red"
-        android:textSize="16sp"
-        android:text="Add to Cart" />
+        android:textSize="12sp"
+        android:background="@drawable/round_button"
+        android:text="Order" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

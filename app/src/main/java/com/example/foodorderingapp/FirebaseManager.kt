@@ -48,7 +48,7 @@ class FirebaseManager private constructor(){
     }
 
     fun getRestaurantMenu(restaurantId: String, callback: FirebaseCallback<List<FoodItem>>) {
-        menuCollection.get()
+        menuCollection.whereEqualTo("restaurant", restaurantId).get()
             .addOnCompleteListener { task ->
                 if(task.isSuccessful) {
                     val menu = mutableListOf<FoodItem>()
