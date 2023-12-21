@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.ImageView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -45,6 +46,9 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         )
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
         actionBarDrawerToggle.syncState()
+
+        val cartIcon: ImageView = toolbar.findViewById(R.id.cartIcon)
+        cartIcon.setOnClickListener { openCartActivity() }
 
         viewPager = findViewById(R.id.poster_viewpager)
         posterAdapter = PosterAdapter(this, posterList)
@@ -90,6 +94,11 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
                 }
             }
         }
+    }
+
+    private fun openCartActivity() {
+        val intent = Intent(this, CartActivity::class.java)
+        startActivity(intent)
     }
 
     private fun scrollNextPoster() {

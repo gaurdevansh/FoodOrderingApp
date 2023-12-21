@@ -1,14 +1,16 @@
 package com.example.foodorderingapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodorderingapp.model.FoodItem
 
-class RestaurantActivity : AppCompatActivity() {
+class RestaurantActivity : AppCompatActivity(), OnItemClickListener {
 
     private val TAG = "RestaurantActivity"
     private val firebaseManager = FirebaseManager.getInstance()
@@ -16,6 +18,7 @@ class RestaurantActivity : AppCompatActivity() {
     private lateinit var menuRecyclerView: RecyclerView
     private lateinit var restaurantName: String
     private lateinit var restaurantId: String
+    private val cartManager: CartManager = CartManager.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +31,10 @@ class RestaurantActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setTitle(restaurantName)
+        val cartIcon: ImageView = toolbar.findViewById(R.id.cartIcon)
+        cartIcon.setOnClickListener { openCartActivity() }
         fetchMenuFromFirestore()
+
     }
 
     private fun fetchMenuFromFirestore() {
@@ -47,10 +53,15 @@ class RestaurantActivity : AppCompatActivity() {
 
     private fun setUpMenuRecyclerview() {
         menuRecyclerView = findViewById(R.id.menuRecyclerview)
-        val menuAdapter = MenuAdapter(menu)
+        val menuAdapter = MenuAdapter(menu, this)
         menuRecyclerView.layoutManager = LinearLayoutManager(this)
         menuRecyclerView.adapter = menuAdapter
         menuRecyclerView.addItemDecoration(SpaceItemDecoration(18))
+    }
+
+    private fun openCartActivity() {
+        val intent = Intent(this, CartActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -60,5 +71,9 @@ class RestaurantActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         finish()
+    }
+
+    override fun onItemClick(position: Int) {
+        cartManager.addItem(menu[position])
     }
 }
