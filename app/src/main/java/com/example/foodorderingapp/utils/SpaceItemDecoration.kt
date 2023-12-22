@@ -1,4 +1,4 @@
-package com.example.foodorderingapp
+package com.example.foodorderingapp.utils
 
 import android.graphics.Rect
 import android.view.View

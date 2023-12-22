@@ -1,4 +1,4 @@
-package com.example.foodorderingapp
+package com.example.foodorderingapp.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +8,9 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.foodorderingapp.manager.CartManager
+import com.example.foodorderingapp.R
+import com.example.foodorderingapp.utils.SpaceItemDecoration
 import com.example.foodorderingapp.adapter.CartAdapter
 
 class CartActivity : AppCompatActivity() {
@@ -23,6 +26,7 @@ class CartActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         setUpCartRecyclerView()
     }

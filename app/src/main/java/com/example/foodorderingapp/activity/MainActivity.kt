@@ -1,9 +1,10 @@
-package com.example.foodorderingapp
+package com.example.foodorderingapp.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.MenuItem
 import android.widget.ImageView
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -12,12 +13,17 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
+import com.example.foodorderingapp.*
+import com.example.foodorderingapp.adapter.PosterAdapter
+import com.example.foodorderingapp.adapter.RestaurantListAdapter
+import com.example.foodorderingapp.manager.FirebaseManager
 import com.example.foodorderingapp.model.Restaurant
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.example.foodorderingapp.utils.OnItemClickListener
+import com.example.foodorderingapp.utils.SpaceItemDecoration
+import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.*
 
-class MainActivity : AppCompatActivity(), OnItemClickListener {
+class MainActivity : AppCompatActivity(), OnItemClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     private val TAG = "MainActivity"
     private val POSTER_SCROLL_TIME = 3000L
@@ -30,6 +36,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
     private var currentPage = 0
     private lateinit var restaurantRecyclerView: RecyclerView
     private lateinit var restaurantList: List<Restaurant>
+    private lateinit var navigationView: NavigationView
 
     private val firebaseManager = FirebaseManager.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +53,8 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         )
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
         actionBarDrawerToggle.syncState()
+        navigationView = findViewById(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener(this)
 
         val cartIcon: ImageView = toolbar.findViewById(R.id.cartIcon)
         cartIcon.setOnClickListener { openCartActivity() }
@@ -66,7 +75,8 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     private fun fetchRestaurantListFromFirestore() {
-        firebaseManager.getRestaurantNames(object : FirebaseManager.FirebaseCallback<List<Restaurant>> {
+        firebaseManager.getRestaurantNames(object :
+            FirebaseManager.FirebaseCallback<List<Restaurant>> {
             override fun onSuccess(result: List<Restaurant>) {
                 restaurantList = result
                 setUpRestaurantRecyclerview()
@@ -84,6 +94,8 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
             true
         } else return super.onOptionsItemSelected(item)
     }
+
+
 
     private fun setPosterScroll() {
         scrollJob = CoroutineScope(Dispatchers.Main).launch {
@@ -118,6 +130,18 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         intent.putExtra("RESTAURANT_NAME", restaurantList[position].name)
         intent.putExtra("RESTAURANT_ID", restaurantList[position].id)
         startActivity(intent)
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.nav_item_signout -> {
+                FirebaseManager.getInstance().signOutUser()
+                startActivity(Intent(this, SignInActivity::class.java))
+                finish()
+            }
+        }
+        drawerLayout.closeDrawer(Gravity.LEFT)
+        return true
     }
 
 }

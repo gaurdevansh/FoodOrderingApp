@@ -1,4 +1,4 @@
-package com.example.foodorderingapp
+package com.example.foodorderingapp.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +8,13 @@ import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.foodorderingapp.*
+import com.example.foodorderingapp.adapter.MenuAdapter
+import com.example.foodorderingapp.manager.CartManager
+import com.example.foodorderingapp.manager.FirebaseManager
 import com.example.foodorderingapp.model.FoodItem
+import com.example.foodorderingapp.utils.OnItemClickListener
+import com.example.foodorderingapp.utils.SpaceItemDecoration
 
 class RestaurantActivity : AppCompatActivity(), OnItemClickListener {
 
@@ -38,7 +44,8 @@ class RestaurantActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     private fun fetchMenuFromFirestore() {
-        firebaseManager.getRestaurantMenu(restaurantId, object: FirebaseManager.FirebaseCallback<List<FoodItem>> {
+        firebaseManager.getRestaurantMenu(restaurantId, object:
+            FirebaseManager.FirebaseCallback<List<FoodItem>> {
             override fun onSuccess(result: List<FoodItem>) {
                 menu = result
                 setUpMenuRecyclerview()

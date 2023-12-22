@@ -1,8 +1,10 @@
-package com.example.foodorderingapp
+package com.example.foodorderingapp.manager
 
 import android.util.Log
 import com.example.foodorderingapp.model.FoodItem
 import com.example.foodorderingapp.model.Restaurant
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FirebaseManager private constructor(){
@@ -14,6 +16,7 @@ class FirebaseManager private constructor(){
     private val db = FirebaseFirestore.getInstance()
     private val restaurantCollection = db.collection(COLLECTION_RESTAURANTS)
     private val menuCollection = db.collection(COLLECTION_MENUITEMS)
+    private val auth = FirebaseAuth.getInstance()
 
     //Singleton instance
     companion object {
@@ -67,7 +70,35 @@ class FirebaseManager private constructor(){
                     Log.w(TAG, "getRestaurantMenu: Exception ", task.exception )
                     callback.onFailure(task.exception!!)
             }
+        }
     }
+
+    fun isUserSignedIn(): Boolean {
+        return auth.currentUser != null
+    }
+
+    fun getCurrentUser(): FirebaseUser? {
+        return auth.currentUser
+    }
+
+    fun registerUserWithEmailAndPassword(email: String, password: String, callback: (Boolean) -> Unit) {
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                callback.invoke(task.isSuccessful)
+            }
+    }
+
+    fun signInWithEmailAndPassword(email: String, password: String, callback: (Boolean) -> Unit) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                callback.invoke(task.isSuccessful)
+            }
+    }
+
+    fun signOutUser() {
+        if(auth.currentUser != null) {
+            auth.signOut()
+        }
     }
 
     interface FirebaseCallback<T> {

@@ -1,6 +1,5 @@
-package com.example.foodorderingapp
+package com.example.foodorderingapp.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +8,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.foodorderingapp.utils.OnItemClickListener
+import com.example.foodorderingapp.R
 import com.example.foodorderingapp.model.FoodItem
 
 class MenuAdapter(private val menu: List<FoodItem>,
-private val clickListener: OnItemClickListener):
+private val clickListener: OnItemClickListener
+):
 RecyclerView.Adapter<MenuAdapter.MenuViewHolder>()
 {
     class MenuViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {

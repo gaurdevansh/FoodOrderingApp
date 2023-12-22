@@ -1,4 +1,4 @@
-package com.example.foodorderingapp
+package com.example.foodorderingapp.manager
 
 import com.example.foodorderingapp.model.FoodItem
 
