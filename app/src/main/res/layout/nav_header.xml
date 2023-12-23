@@ -15,7 +15,7 @@
         android:layout_marginTop="10dp" />
     
     <TextView
-        android:id="@+id/tv_app_name"
+        android:id="@+id/tv_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/iv_icon"

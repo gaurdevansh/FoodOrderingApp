@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -55,6 +56,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, NavigationView.On
         actionBarDrawerToggle.syncState()
         navigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
+        val tvUser = navigationView.findViewById<TextView>(R.id.tv_user_name)
 
         val cartIcon: ImageView = toolbar.findViewById(R.id.cartIcon)
         cartIcon.setOnClickListener { openCartActivity() }
@@ -138,6 +140,9 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, NavigationView.On
                 FirebaseManager.getInstance().signOutUser()
                 startActivity(Intent(this, SignInActivity::class.java))
                 finish()
+            }
+            R.id.nav_item_cart -> {
+                startActivity(Intent(this, CartActivity::class.java))
             }
         }
         drawerLayout.closeDrawer(Gravity.LEFT)

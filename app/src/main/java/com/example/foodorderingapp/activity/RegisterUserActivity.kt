@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.foodorderingapp.R
 import com.example.foodorderingapp.manager.FirebaseManager
+import com.example.foodorderingapp.model.User
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuthSettings
 import kotlinx.coroutines.GlobalScope
@@ -79,18 +80,26 @@ class RegisterUserActivity : AppCompatActivity() {
             progressBar.visibility = View.GONE
             return
         }
-        registerUser()
+        val user = User(username.text.toString(),
+            fullName.text.toString(),
+            number.text.toString(),
+            city.text.toString())
+        registerUser(user)
     }
 
-    private fun registerUser() {
+    private fun registerUser(user: User) {
         FirebaseManager.getInstance().registerUserWithEmailAndPassword(
             username.text.toString(), password.text.toString()) { success ->
             if (success) {
-                progressBar.visibility = View.GONE
-                Snackbar.make(rootView, "Successfully Registered", Snackbar.LENGTH_SHORT).show()
-                GlobalScope.launch {
-                    delay(DELAY)
-                    finish()
+                FirebaseManager.getInstance().addUser(user) { success ->
+                    if(success) {
+                        progressBar.visibility = View.GONE
+                        Snackbar.make(rootView, "Successfully Registered", Snackbar.LENGTH_SHORT).show()
+                        GlobalScope.launch {
+                            delay(DELAY)
+                            finish()
+                        }
+                    }
                 }
             } else {
                 progressBar.visibility = View.GONE

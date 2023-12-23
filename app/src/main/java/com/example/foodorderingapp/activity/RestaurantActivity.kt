@@ -13,6 +13,7 @@ import com.example.foodorderingapp.adapter.MenuAdapter
 import com.example.foodorderingapp.manager.CartManager
 import com.example.foodorderingapp.manager.FirebaseManager
 import com.example.foodorderingapp.model.FoodItem
+import com.example.foodorderingapp.model.OrderItem
 import com.example.foodorderingapp.utils.OnItemClickListener
 import com.example.foodorderingapp.utils.SpaceItemDecoration
 
@@ -81,6 +82,8 @@ class RestaurantActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     override fun onItemClick(position: Int) {
-        cartManager.addItem(menu[position])
+        val foodItem = menu[position]
+        val orderItem = OrderItem(foodItem.name, foodItem.price, 1, foodItem.id, foodItem.restaurantId)
+        cartManager.addItem(orderItem)
     }
 }

@@ -1,10 +1,11 @@
 package com.example.foodorderingapp.manager
 
 import com.example.foodorderingapp.model.FoodItem
+import com.example.foodorderingapp.model.OrderItem
 
 class CartManager private constructor(){
 
-    private var cart: MutableList<FoodItem> = mutableListOf()
+    private var cart: MutableList<OrderItem> = mutableListOf()
 
     companion object {
         private var instance: CartManager? = null
@@ -18,22 +19,22 @@ class CartManager private constructor(){
     }
 
 
-    fun addItem(foodItem: FoodItem) {
-        cart.add(foodItem)
+    fun addItem(orderItem: OrderItem) {
+        cart.add(orderItem)
     }
 
-    fun removeItem(foodItem: FoodItem) {
-        cart.removeIf { it == foodItem }
+    fun removeItem(orderItem: OrderItem) {
+        cart.removeIf { it == orderItem }
     }
 
-    fun getCart(): List<FoodItem> {
+    fun getCart(): List<OrderItem> {
         return cart
     }
 
     fun calculateTotal(): Double {
         var total: Double = 0.0
-        for (foodItem in cart) {
-            total+=foodItem.price
+        for (orderItem in cart) {
+            total+=orderItem.price * orderItem.qty
         }
         return total
     }

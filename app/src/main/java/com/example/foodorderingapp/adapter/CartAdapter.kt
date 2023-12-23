@@ -7,9 +7,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodorderingapp.R
-import com.example.foodorderingapp.model.FoodItem
+import com.example.foodorderingapp.model.OrderItem
 
-class CartAdapter(private val cart: List<FoodItem>): RecyclerView.Adapter<CartAdapter.CartViewHolder>(){
+class CartAdapter(private val cart: List<OrderItem>): RecyclerView.Adapter<CartAdapter.CartViewHolder>(){
 
     class CartViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val title: TextView = itemView.findViewById(R.id.itemTitle)
@@ -28,9 +28,9 @@ class CartAdapter(private val cart: List<FoodItem>): RecyclerView.Adapter<CartAd
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-        val foodItem = cart[position]
-        holder.title.text = foodItem.name
-        holder.qty.text = "1"
-        holder.price.text = foodItem.price.toString()
+        val orderItem = cart[position]
+        holder.title.text = orderItem.name
+        holder.qty.text = orderItem.qty.toString()
+        holder.price.text = orderItem.price.toString()
     }
 }
