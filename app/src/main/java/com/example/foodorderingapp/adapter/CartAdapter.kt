@@ -7,9 +7,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodorderingapp.R
+import com.example.foodorderingapp.manager.CartManager
 import com.example.foodorderingapp.model.OrderItem
+import com.example.foodorderingapp.utils.OnItemClickListener
 
-class CartAdapter(private val cart: List<OrderItem>): RecyclerView.Adapter<CartAdapter.CartViewHolder>(){
+class CartAdapter(private val clickListener: OnItemClickListener): RecyclerView.Adapter<CartAdapter.CartViewHolder>(){
+
+    private val cart: List<OrderItem> = CartManager.getInstance().getCart()
 
     class CartViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val title: TextView = itemView.findViewById(R.id.itemTitle)
@@ -32,5 +36,10 @@ class CartAdapter(private val cart: List<OrderItem>): RecyclerView.Adapter<CartA
         holder.title.text = orderItem.name
         holder.qty.text = orderItem.qty.toString()
         holder.price.text = orderItem.price.toString()
+        holder.removeBtn.setOnClickListener {
+            CartManager.getInstance().removeItem(orderItem)
+            notifyDataSetChanged()
+            clickListener.onItemClick(position)
+        }
     }
 }

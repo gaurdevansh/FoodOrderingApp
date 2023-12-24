@@ -19,11 +19,12 @@ import com.example.foodorderingapp.adapter.CartAdapter
 import com.example.foodorderingapp.manager.FirebaseManager
 import com.example.foodorderingapp.model.Order
 import com.example.foodorderingapp.model.OrderItem
+import com.example.foodorderingapp.utils.OnItemClickListener
 import com.google.android.material.snackbar.Snackbar
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class CartActivity : AppCompatActivity() {
+class CartActivity : AppCompatActivity(), OnItemClickListener {
 
     private val cartManager = CartManager.getInstance()
     private lateinit var cartRecyclerView: RecyclerView
@@ -58,7 +59,7 @@ class CartActivity : AppCompatActivity() {
             emptyCartText.visibility = View.GONE
             placeOrderBtn.visibility = View.VISIBLE
             cartRecyclerView = findViewById(R.id.cartRecyclerview)
-            cartAdapter = CartAdapter(cartManager.getCart())
+            cartAdapter = CartAdapter(this)
             cartRecyclerView.layoutManager = LinearLayoutManager(this)
             cartRecyclerView.adapter = cartAdapter
             cartRecyclerView.addItemDecoration(SpaceItemDecoration(8))
@@ -67,13 +68,16 @@ class CartActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun placeOrder() {
-        val cart: List<OrderItem> = CartManager.getInstance().getCart()
+        val cart: List<OrderItem> = cartManager.getCart()
         val userId = FirebaseManager.getInstance().getCurrentUser()
-        val order = Order(userId.toString(), cart, CartManager.getInstance().calculateTotal(), getCurrentDate())
+        val order = Order(userId.toString(), cart, cartManager.calculateTotal(), getCurrentDate())
 
         FirebaseManager.getInstance().placeOrder(order) { success ->
             if(success) {
                 Snackbar.make(rootView, "Order Successfully Placed", Snackbar.LENGTH_SHORT).show()
+                cartManager.clearCart()
+                cartAdapter.notifyDataSetChanged()
+                placeOrderBtn.visibility = View.GONE
             } else {
                 Snackbar.make(rootView, "Order could no be placed!", Snackbar.LENGTH_SHORT).show()
             }
@@ -94,5 +98,11 @@ class CartActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         finish()
+    }
+
+    override fun onItemClick(position: Int) {
+        if(cartManager.isEmpty()) {
+            placeOrderBtn.visibility = View.GONE
+        }
     }
 }

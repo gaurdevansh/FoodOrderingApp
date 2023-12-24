@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.foodorderingapp.R
 import com.example.foodorderingapp.manager.FirebaseManager
+import com.example.foodorderingapp.manager.UserManager
 import com.google.android.material.snackbar.Snackbar
 
 class SignInActivity : AppCompatActivity() {
@@ -65,6 +66,7 @@ class SignInActivity : AppCompatActivity() {
         password.text.toString()) { success ->
             if(success) {
                 progressBar.visibility = View.GONE
+                UserManager.getInstance().setUsername(username.text.toString())
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {

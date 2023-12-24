@@ -18,7 +18,9 @@ import com.example.foodorderingapp.*
 import com.example.foodorderingapp.adapter.PosterAdapter
 import com.example.foodorderingapp.adapter.RestaurantListAdapter
 import com.example.foodorderingapp.manager.FirebaseManager
+import com.example.foodorderingapp.manager.UserManager
 import com.example.foodorderingapp.model.Restaurant
+import com.example.foodorderingapp.model.User
 import com.example.foodorderingapp.utils.OnItemClickListener
 import com.example.foodorderingapp.utils.SpaceItemDecoration
 import com.google.android.material.navigation.NavigationView
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, NavigationView.On
     private lateinit var restaurantRecyclerView: RecyclerView
     private lateinit var restaurantList: List<Restaurant>
     private lateinit var navigationView: NavigationView
+    private var userManager = UserManager.getInstance()
 
     private val firebaseManager = FirebaseManager.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +49,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, NavigationView.On
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        //userManager.getUserFromFirebase()
 
         drawerLayout = findViewById(R.id.drawer_layout)
         actionBarDrawerToggle = ActionBarDrawerToggle(
@@ -66,6 +70,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, NavigationView.On
         viewPager.adapter = posterAdapter
         setPosterScroll()
         fetchRestaurantListFromFirestore()
+        //tvUser.text = "Hi, ${userManager.getUser()?.fullName}"
     }
 
     private fun setUpRestaurantRecyclerview() {
