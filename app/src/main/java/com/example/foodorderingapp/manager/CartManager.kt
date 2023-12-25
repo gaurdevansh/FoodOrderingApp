@@ -46,4 +46,8 @@ class CartManager private constructor(){
     fun isEmpty(): Boolean {
         return cart.size == 0
     }
+
+    fun getNoOfItems(): Int {
+        return cart.size
+    }
 }

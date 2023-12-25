@@ -37,6 +37,10 @@ RecyclerView.Adapter<RestaurantListAdapter.RestaurantViewHolder>()
         holder.itemView.setOnClickListener {
             clickListener.onItemClick(position)
         }
+        if(!restaurant.isOpen) {
+            holder.itemView.isClickable = false
+            holder.itemView.alpha = 0.5f
+        }
     }
 
 }

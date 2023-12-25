@@ -44,7 +44,8 @@ class FirebaseManager private constructor(){
                         val id = document.id
                         val name = document.getString("name") ?: ""
                         val logoUrl = document.getString("logoUrl") ?: ""
-                        val restaurant = Restaurant(id, name, logoUrl)
+                        val isOpen = document.getBoolean("isOpen") ?: false
+                        val restaurant = Restaurant(id, name, logoUrl, isOpen)
                         restaurants.add(restaurant)
                     }
                     callback.onSuccess(restaurants)
