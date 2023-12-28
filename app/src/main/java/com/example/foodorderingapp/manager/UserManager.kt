@@ -1,12 +1,15 @@
 package com.example.foodorderingapp.manager
 
 import android.util.Log
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import com.example.foodorderingapp.model.User
 
 class UserManager private constructor() {
 
-    private lateinit var user: User
+    private var user: User = User("", "", "", "")
     private lateinit var username: String
+    private lateinit var userType: String
 
     companion object {
         private var instance: UserManager? = null
@@ -19,16 +22,13 @@ class UserManager private constructor() {
         }
     }
 
-    fun getUserFromFirebase() {
-        FirebaseManager.getInstance().getUser(this.username, object: FirebaseManager.FirebaseCallback<User> {
-            override fun onSuccess(result: User) {
-                setUser(result)
+    fun observeUserDetails(lifecycleOwner: LifecycleOwner) {
+        val userObserver = Observer<User?> { user ->
+            if(user != null) {
+                this.user = user
             }
-
-            override fun onFailure(e: Exception) {
-                Log.w("UserManager", "onFailure: Fetching Username failed", )
-            }
-        })
+        }
+        FirebaseManager.getInstance().getUserDetails(this.username).observe(lifecycleOwner, userObserver)
     }
 
     private fun setUser(user: User) {
@@ -41,5 +41,13 @@ class UserManager private constructor() {
 
     fun setUsername(username: String) {
         this.username = username
+    }
+
+    fun setUserType(userType: String) {
+        this.userType = userType
+    }
+
+    fun getUserType(): String {
+        return ""
     }
 }

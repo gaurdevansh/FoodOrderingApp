@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, NavigationView.On
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        UserManager.getInstance().observeUserDetails(this)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         //userManager.getUserFromFirebase()
@@ -59,6 +60,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, NavigationView.On
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
         actionBarDrawerToggle.syncState()
         navigationView = findViewById(R.id.nav_view)
+        //navigationView.inflateHeaderView(R.layout.nav_header)
         navigationView.setNavigationItemSelectedListener(this)
         val tvUser = navigationView.findViewById<TextView>(R.id.tv_user_name)
 

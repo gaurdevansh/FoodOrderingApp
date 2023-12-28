@@ -5,4 +5,6 @@ data class User(
     val fullName: String,
     val phoneNumer: String,
     val city: String
-)
+) {
+    constructor() : this("", "", "", "")
+}

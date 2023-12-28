@@ -1,6 +1,8 @@
 package com.example.foodorderingapp.manager
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.foodorderingapp.model.FoodItem
 import com.example.foodorderingapp.model.Order
 import com.example.foodorderingapp.model.Restaurant
@@ -56,17 +58,19 @@ class FirebaseManager private constructor(){
             }
     }
 
-    fun getUser(username: String, callback: FirebaseCallback<User>) {
+    fun getUserDetails(username: String): LiveData<User?> {
+        val userLiveData = MutableLiveData<User?>()
         userCollection.whereEqualTo("username", username).get()
             .addOnCompleteListener { task ->
                 if(task.isSuccessful) {
-                    val user = task.result!!.documents.firstOrNull()?.toObject(User::class.java)!!
-                    callback.onSuccess(user)
+                    val user = task.result?.documents?.firstOrNull()?.toObject(User::class.java)
+                    userLiveData.value = user
                 } else {
                     Log.w(TAG, "getUser: Exception ",task.exception )
-                    callback.onFailure(task.exception!!)
+                    userLiveData.value = null
                 }
             }
+        return userLiveData
     }
 
     fun getRestaurantMenu(restaurantId: String, callback: FirebaseCallback<List<FoodItem>>) {
